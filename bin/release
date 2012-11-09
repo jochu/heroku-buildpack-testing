@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cat <<EOF
+---
+addons:
+config_vars:
+  LD_LIBRARY_PATH=/app/vendor/gmp/lib
+default_process_types:
+  web: bin/launch .cabal/bin/
+EOF

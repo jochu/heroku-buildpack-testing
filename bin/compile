@@ -1,0 +1,67 @@
+#!/bin/sh
+
+# config
+GMP_VERSION=5.0.5
+HASKELL_PLATFORM_VERSION=2012.4.0.0
+S3_BUCKET=haskell-platform-bp
+
+BIN_DIR=$(dirname $0)
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+echo "-----> Found a cabal-install.packages"
+
+if [ ! -s $1/cabal-install.packages ]; then
+    echo "cabal-install.packages was empty"
+    exit
+fi
+
+cd $BUILD_DIR
+
+mkdir -p vendor
+cd vendor
+
+GMP_URL="https://s3.amazonaws.com/${S3_BUCKET}/gmp-${GMP_VERSION}.tar.xz"
+echo "-----> Bundling GMP version ${GMP_VERSION}"
+curl --silent --max-time 60 --location "$GMP_URL" | tar xJ
+
+GHC_URL="https://s3.amazonaws.com/${S3_BUCKET}/haskell-platform-${HASKELL_PLATFORM_VERSION}.tar.xz"
+echo "-----> Bundling Haskell Platform version ${HASKELL_PLATFORM_VERSION}"
+curl --silent --max-time 60 --location "$GMP_URL" | tar xJ
+
+cd ..
+
+# TODO: Include prebuilt .cabal/.ghc dependencies if available
+
+export LD_LIBRARY_PATH=$BUILD_DIR/vendor/gmp/lib:$LD_LIBRARY_PATH
+export PATH=$BUILD_DIR/vendor/ghc/bin:$BUILD_DIR/.cabal/bin:$PATH
+
+echo "-----> Updating cabal"
+cabal update | indent
+
+echo "-----> Cabal installing packages"
+HOME=$BUILD_DIR cabal install \
+    --user \
+    --disable-library-profiling \
+    --disable-library-for-ghci \
+    --enable-executable-stripping \
+    --disable-tests \
+    --disable-library-coverage \
+    --disable-benchmarks \
+    --disable-documentation \
+    $(cat cabal-install.packages) | indent
+
+echo "-----> Removing unnecessary build artifacts"
+# FIXME: Knock off unused .ghc, .cabal/... 
+cd vendor
+rm -rf ghc
+cd ..
+
+echo >boot.sh <<EOF
+export LD_LIBRARY_PATH=/app/vendor/gmp/lib:$LD_LIBRARY_PATH
+exec $0
+EOF
