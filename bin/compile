@@ -5,19 +5,39 @@ GMP_VERSION=5.0.5
 HASKELL_PLATFORM_VERSION=2012.4.0.0
 S3_BUCKET=haskell-platform-bp
 
-BIN_DIR=$(dirname $0)
-BUILD_DIR=$1
-CACHE_DIR=$2
+BIN_DIR="$(dirname $0)"
+BUILD_DIR="$1"
+CACHE_DIR="$2"
 
 indent() {
   sed -u 's/^/       /'
 }
 
-echo "-----> Found a cabal-install.packages"
+echo "-----> Found cabal-install.packages"
 
-if [ ! -s $1/cabal-install.packages ]; then
+if [ ! -s "$BUILD_DIR/cabal-install.packages" ]; then
     echo "cabal-install.packages was empty"
-    exit
+    exit 1
+fi
+
+cabal_executable="0"
+for pkg in $(grep '\/$\|^\.$' "$BUILD_DIR/cabal-install.packages")
+do
+    if [ ! -d "$pkg" ]
+    then
+        echo "Directory $pkg was not found" | indent
+        exit 1
+    else
+        if grep --silent -i '^executable' "$pkg/"*.cabal > /dev/null
+            cabal_executable="1"
+            break
+        fi
+    fi
+done
+
+if [ "$cabal_executable" = "0" ]; then
+    echo "No executable cabals found" | indent
+    exit 1
 fi
 
 cd $BUILD_DIR
@@ -37,8 +57,8 @@ cd ..
 
 # TODO: Include prebuilt .cabal/.ghc dependencies if available
 
-export LD_LIBRARY_PATH=$BUILD_DIR/vendor/gmp/lib:$LD_LIBRARY_PATH
-export PATH=$BUILD_DIR/vendor/ghc/bin:$BUILD_DIR/.cabal/bin:$PATH
+export LD_LIBRARY_PATH="$BUILD_DIR/vendor/gmp/lib:$LD_LIBRARY_PATH"
+export PATH="$BUILD_DIR/vendor/ghc/bin:$BUILD_DIR/.cabal/bin:$PATH"
 
 echo "-----> Updating cabal"
 cabal update | indent

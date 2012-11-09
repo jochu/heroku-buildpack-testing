@@ -19,6 +19,16 @@ $ ls
 $ heroku create --stack cedar --buildpack http://github.com/jochu/haskell-platform-buildpack
 ```
 
+Package should contain cabal-install.packages containing packages to cabal-install. Follows cabal install conventions
+where you would include a trailing '/' to indicate you're installing a package in the path and no '/' to indicate you're
+installing a package from hackage.
+
+If you do not have sub-packages and you are installing the current repo, simply include `.` in your
+cabal-install.packages file.
+
+The executable run for the website is the first non-remote executable cabal found in the cabal-install.packages list. If
+none is found, compilation will fail.
+
 Hacking
 ----
 

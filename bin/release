@@ -1,10 +1,31 @@
 #!/bin/sh
 
+BUILD_DIR=$1
+
+for pkg in $(cat "$BUILD_DIR/cabal-install.packages")
+do
+    if [ -d "$pkg" ]
+    then
+        executable=$(awk -vIGNORECASE=1 '$0 ~ /^executable/ {print $2; exit}' "$pkg/"*.cabal)
+        if [ -n "$executable" ]
+        then
+            break
+        fi
+    fi
+done
+
+if [ -z "$bin" ]
+then
+    echo "Could not find binary"
+fi
+
 cat <<EOF
 ---
 addons:
 config_vars:
-  LD_LIBRARY_PATH=/app/vendor/gmp/lib
+  PATH: /app/.cabal/bin:/usr/local/bin:/usr/bin:/bin
+  LD_LIBRARY_PATH: /app/vendor/gmp/lib
+  GHCRTS: -M384m
 default_process_types:
-  web: bin/launch .cabal/bin/
+  web: ${executable}
 EOF
