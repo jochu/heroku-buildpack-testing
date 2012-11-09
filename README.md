@@ -1,8 +1,8 @@
 Heroku buildpack: Haskell Platform
 ====
 
-This is a (https://devcenter.heroku.com/articles/buildpacks)[Heroku Buildpack] for Haskell apps. It uses an OpenGL-less
-(http://www.haskell.org/platform/)[Haskell Platform].
+This is a [Heroku Buildpack](https://devcenter.heroku.com/articles/buildpacks) for Haskell apps. It uses an OpenGL-less
+[Haskell Platform](http://www.haskell.org/platform/).
 
 Still in development
 ----
