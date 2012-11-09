@@ -12,10 +12,7 @@ This package is still in development and isn't quite ready for use yet.
 Usage
 ----
 
-First you need to 
-
 ```
-$ ls
 $ heroku create --stack cedar --buildpack http://github.com/jochu/haskell-platform-buildpack
 ```
 
