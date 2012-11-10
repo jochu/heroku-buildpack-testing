@@ -37,6 +37,8 @@ $ cp prepare/config.example prepare/config
 
 Open `prepare/config` in your editor and modify configs.
 
+Execute the following to begin compilation. Compilation can take quite a while (over an hour).
+
 ```
 $ support/build.sh
 ```
