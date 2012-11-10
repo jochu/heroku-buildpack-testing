@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 BUILD_DIR=$1
 
@@ -6,7 +7,7 @@ for pkg in $(cat "$BUILD_DIR/cabal-install.packages")
 do
     if [ -d "$pkg" ]
     then
-        executable=$(awk -vIGNORECASE=1 '$0 ~ /^executable/ {print $2; exit}' "$pkg/"*.cabal)
+        executable=$(awk -vIGNORECASE=1 '$0 ~ /^executable/ {print $2; exit}' "$BUILD_DIR/$pkg/"*.cabal)
         if [ -n "$executable" ]
         then
             break
