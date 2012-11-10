@@ -27,7 +27,6 @@ addons:
 config_vars:
   PATH: /app/.cabal/bin:/usr/local/bin:/usr/bin:/bin
   LD_LIBRARY_PATH: /app/vendor/gmp/lib
-  GHCRTS: -M384m
 default_process_types:
   web: ${executable}
 EOF
