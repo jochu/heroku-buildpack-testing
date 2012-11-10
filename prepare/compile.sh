@@ -79,12 +79,33 @@ echo "-----> Tarballing haskell platform ${HASKELL_PLATFORM_VERSION}"
 tar cf haskell-platform-server-${HASKELL_PLATFORM_VERSION}.tar ghc
 xz -zvv haskell-platform-server-${HASKELL_PLATFORM_VERSION}.tar
 
+echo "-----> Creating stripped haskell platform"
+echo "       This is the haskell platform with various parts (profiling etc) deleted"
+echo "       This is done to achieve smaller payload for faster bundling during"
+echo "       slug compilation."
+echo
+echo "       This is fairly experimental and dangerous, if errors are encountered"
+echo "       use the full version"
+
+rm -rf ghc/share/doc
+find ghc -name '*_p.a' -delete
+find ghc -name '*_hi' -delete
+find ghc -name '*.so' -delete
+find ghc -name '*.o' -delete
+strip --strip-unneeded ghc/lib/ghc-*/{ghc,haddock,ghc-pkg,hsc2hs,runghc}
+
+echo "-----> Tarballing haskell platform stripped ${HASKELL_PLATFORM_VERSION}"
+tar cf haskell-platform-server-stripped-${HASKELL_PLATFORM_VERSION}.tar ghc
+xz -zvv haskell-platform-server-stripped-${HASKELL_PLATFORM_VERSION}.tar
+
 echo "-----> Uploading to AWS S3"
 gem install aws-s3 --user > /dev/null
 
 ~/.gem/ruby/1.9.1/bin/s3sh <<EOF
 hp = "haskell-platform-server-${HASKELL_PLATFORM_VERSION}.tar.xz"
+shp = "haskell-platform-server-stripped-${HASKELL_PLATFORM_VERSION}.tar.xz"
 gmp = "gmp-${GMP_VERSION}.tar.xz"
 S3Object.store(hp, open(hp), "${AMAZON_S3_BUCKET}", :access => :public_read)
 S3Object.store(gmp, open(gmp), "${AMAZON_S3_BUCKET}", :access => :public_read)
+S3Object.store(shp, open(shp), "${AMAZON_S3_BUCKET}", :access => :public_read)
 EOF
