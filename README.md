@@ -13,7 +13,7 @@ Usage
 ----
 
 ```
-$ heroku create --stack cedar --buildpack http://github.com/jochu/haskell-platform-buildpack
+$ heroku apps:create --stack cedar --buildpack http://github.com/jochu/haskell-platform-buildpack
 ```
 
 Package should contain cabal-install.packages containing packages to cabal-install. Follows cabal install conventions
