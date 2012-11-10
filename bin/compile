@@ -50,7 +50,7 @@ GMP_URL="https://s3.amazonaws.com/${S3_BUCKET}/gmp-${GMP_VERSION}.tar.xz"
 echo "-----> Bundling GMP version ${GMP_VERSION}"
 curl --silent --max-time 60 --location "$GMP_URL" | tar xJ
 
-GHC_URL="https://s3.amazonaws.com/${S3_BUCKET}/haskell-platform-${HASKELL_PLATFORM_VERSION}.tar.xz"
+GHC_URL="https://s3.amazonaws.com/${S3_BUCKET}/haskell-platform-server-${HASKELL_PLATFORM_VERSION}.tar.xz"
 echo "-----> Bundling Haskell Platform version ${HASKELL_PLATFORM_VERSION}"
 curl --silent --max-time 60 --location "$GHC_URL" | tar xJ
 
