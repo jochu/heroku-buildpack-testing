@@ -85,7 +85,10 @@ mv $HOME/.cabal $BUILD_DIR/.cabal
 
 echo "-----> Removing unnecessary build artifacts"
 rm -rf $BUILD_DIR/.cabal/packages
-# FIXME: delete package dist files
+for pkg in $(grep '\/$\|^\.$' "$BUILD_DIR/cabal-install.packages")
+do
+    rm -rf "$BUILD_DIR/$pkg/dist"
+done
 cd vendor
 rm -rf ghc
 cd ..
