@@ -56,6 +56,11 @@ curl --silent --max-time 60 --location "$GHC_URL" | tar xJ
 
 cd ..
 
+# Link in gmp and ghc into /app/vendor because GHC likes things consistent
+mkdir -p /app/vendor
+ln -s $BUILD_DIR/vendor/gmp /app/vendor/gmp
+ln -s $BUILD_DIR/vendor/ghc /app/vendor/ghc
+
 # TODO: Include prebuilt .cabal/.ghc dependencies if available
 
 export LD_LIBRARY_PATH="$BUILD_DIR/vendor/gmp/lib:$LD_LIBRARY_PATH"
