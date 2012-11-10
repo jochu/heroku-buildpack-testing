@@ -65,7 +65,7 @@ echo "-----> Updating cabal"
 cabal update | indent
 
 echo "-----> Cabal installing packages"
-HOME=$BUILD_DIR cabal install \
+cabal install \
     --user \
     --disable-library-profiling \
     --disable-library-for-ghci \
@@ -75,6 +75,9 @@ HOME=$BUILD_DIR cabal install \
     --disable-benchmarks \
     --disable-documentation \
     $(cat cabal-install.packages) | indent
+
+mv $HOME/.cabal $BUILD_DIR/.cabal
+mv $HOME/.ghc $BUILD_DIR/.ghc
 
 echo "-----> Removing unnecessary build artifacts"
 # FIXME: Knock off unused .ghc, .cabal/... 
