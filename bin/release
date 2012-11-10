@@ -14,9 +14,10 @@ do
     fi
 done
 
-if [ -z "$bin" ]
+if [ -z "$executable" ]
 then
     echo "Could not find binary"
+    exit 1
 fi
 
 cat <<EOF
