@@ -29,6 +29,7 @@ do
         exit 1
     else
         if grep --silent -i '^executable' "$pkg/"*.cabal > /dev/null
+        then
             cabal_executable="1"
             break
         fi
