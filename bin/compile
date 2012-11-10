@@ -28,7 +28,7 @@ do
         echo "Directory $pkg was not found" | indent
         exit 1
     else
-        if grep --silent -i '^executable' "$pkg/"*.cabal > /dev/null
+        if grep --silent -i '^executable' "$BUILD_DIR/$pkg/"*.cabal > /dev/null
         then
             cabal_executable="1"
             break
