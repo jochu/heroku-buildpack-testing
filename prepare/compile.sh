@@ -85,6 +85,6 @@ gem install aws-s3 --user > /dev/null
 ~/.gem/ruby/1.9.1/bin/s3sh <<EOF
 hp = "haskell-platform-server-${HASKELL_PLATFORM_VERSION}.tar.xz"
 gmp = "gmp-${GMP_VERSION}.tar.xz"
-S3Object.store(hp, open(hp), "${AMAZON_S3_BUCKET}")
-S3Object.store(gmp, open(gmp), "${AMAZON_S3_BUCKET}")
+S3Object.store(hp, open(hp), "${AMAZON_S3_BUCKET}", :access => :public_read)
+S3Object.store(gmp, open(gmp), "${AMAZON_S3_BUCKET}", :access => :public_read)
 EOF
