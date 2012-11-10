@@ -67,7 +67,7 @@ export LD_LIBRARY_PATH="$BUILD_DIR/vendor/gmp/lib:$LD_LIBRARY_PATH"
 export PATH="$BUILD_DIR/vendor/ghc/bin:$BUILD_DIR/.cabal/bin:$PATH"
 
 echo "-----> Updating cabal"
-cabal update | indent
+cabal update | indent | indent
 
 echo "-----> Cabal installing packages"
 cabal install \
@@ -79,7 +79,7 @@ cabal install \
     --disable-library-coverage \
     --disable-benchmarks \
     --disable-documentation \
-    $(cat cabal-install.packages) | indent
+    $(cat cabal-install.packages) | indent | indent
 
 mv $HOME/.cabal $BUILD_DIR/.cabal
 

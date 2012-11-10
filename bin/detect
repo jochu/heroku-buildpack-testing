@@ -4,7 +4,7 @@ BUILD_DIR="$1"
 
 if [ -f "$BUILD_DIR/cabal-install.packages" ]
 then
-    echo "Cabal-Haskell"
+    echo "haskell-platform"
     exit 0
 else
     exit 1
